@@ -35,10 +35,15 @@ export class UserController {
 
   @Post('create')
   @UseInterceptors(
-    FileFieldsInterceptor([
-      { name: 'images', maxCount: 2 },
-      { name: 'selfie', maxCount: 1 },
-    ]),
+    FileFieldsInterceptor(
+      [
+        { name: 'images', maxCount: 2 },
+        { name: 'selfie', maxCount: 1 },
+      ],
+      {
+        limits: { fileSize: 50 * 1024 * 1024 }, // 50 MB
+      },
+    ),
   )
   async create(
     @Body() createUserDto: UserDataDto,
