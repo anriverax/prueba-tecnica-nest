@@ -10,6 +10,8 @@ import {
   UseInterceptors,
   Logger,
   UseGuards,
+  ParseFilePipeBuilder,
+  HttpStatus,
 } from '@nestjs/common';
 import { UserDataDto } from './user.dto';
 import { CloudService } from '@/services/cloudinary/cloud.service';
@@ -47,7 +49,19 @@ export class UserController {
   )
   async create(
     @Body() createUserDto: UserDataDto,
-    @UploadedFiles() files: { images: Express.Multer.File[]; selfie: Express.Multer.File }, // Recibe todo en un solo objeto
+    @UploadedFiles(
+      new ParseFilePipeBuilder()
+        .addFileTypeValidator({
+          fileType: /(jpg|jpeg|png)$/,
+        })
+        .addMaxSizeValidator({
+          maxSize: 50 * 1024 * 1024, // 50 MB
+        })
+        .build({
+          errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+        }),
+    )
+    files: { images: Express.Multer.File[]; selfie: Express.Multer.File }, // Recibe todo en un solo objeto
   ) {
     this.logger.log(`Creating a new user: ${JSON.stringify(createUserDto)}`);
     const imagesUrls: string[] = [];
