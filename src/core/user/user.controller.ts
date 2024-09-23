@@ -1,12 +1,25 @@
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 // import { UserService } from './user.service';
-import { Body, Controller, Post, Query, Get, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  Query,
+  Get,
+  UploadedFiles,
+  UseInterceptors,
+  Logger,
+  UseGuards,
+} from '@nestjs/common';
 import { UserDataDto } from './user.dto';
 import { CloudService } from '@/services/cloudinary/cloud.service';
 import { UserService } from './user.service';
+import { ApiKeyGuard } from '@/guards/strategy';
 
 @Controller('api/user')
+@UseGuards(ApiKeyGuard)
 export class UserController {
+  private readonly logger = new Logger(UserController.name);
   constructor(
     private readonly userService: UserService,
     private readonly cloudService: CloudService,
@@ -14,6 +27,7 @@ export class UserController {
 
   @Get()
   async getUsers(@Query('page') page: string = '1', @Query('pageSize') pageSize: string = '10') {
+    this.logger.log('Fetching all users');
     const pageNumber = parseInt(page, 10);
     const pageSizeNumber = parseInt(pageSize, 10);
     return this.userService.getAll(pageNumber, pageSizeNumber);
@@ -30,6 +44,7 @@ export class UserController {
     @Body() createUserDto: UserDataDto,
     @UploadedFiles() files: { images: Express.Multer.File[]; selfie: Express.Multer.File }, // Recibe todo en un solo objeto
   ) {
+    this.logger.log(`Creating a new user: ${JSON.stringify(createUserDto)}`);
     const imagesUrls: string[] = [];
 
     for (const img of files.images) {
@@ -46,7 +61,7 @@ export class UserController {
     };
 
     const result = await this.userService.create(newData);
-
+    this.logger.log(`User created: ${result.data}`);
     return result;
   }
 }

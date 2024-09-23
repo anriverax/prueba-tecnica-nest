@@ -24,4 +24,5 @@ export default () => ({
     url: process.env.DATABASE_URL,
   },
   cloudApiKey: process.env.CLOUD_APIKEY,
+  serverApiKey: process.env.SERVER_API_KEY,
 });

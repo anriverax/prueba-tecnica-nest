@@ -19,6 +19,8 @@ class EnviromentVariables {
 
   @IsString()
   CLOUD_APIKEY: string;
+  @IsString()
+  SERVER_API_KEY: string;
 }
 
 export function validate(configuration: Record<string, unknown>) {
