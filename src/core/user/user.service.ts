@@ -15,7 +15,7 @@ export class UserService {
         skip,
         take: pageSize,
         orderBy: {
-          id: 'asc',
+          id: 'desc',
         },
       }),
       this.prisma.user.count(),
