@@ -15,7 +15,6 @@ import { UserDataDto } from './user.dto';
 import { CloudService } from '@/services/cloudinary/cloud.service';
 import { UserService } from './user.service';
 import { ApiKeyGuard } from '@/guards/strategy';
-import { memoryStorage } from 'multer';
 import { ParseMultipleFilesPipe } from './multiple-files.pipe';
 
 @Controller('api/user')
@@ -44,7 +43,8 @@ export class UserController {
   )
   async create(
     @Body() createUserDto: UserDataDto,
-    @UploadedFiles(ParseMultipleFilesPipe) files: { images: Express.Multer.File[]; selfie: Express.Multer.File }, // Recibe todo en un solo objeto
+    @UploadedFiles(ParseMultipleFilesPipe)
+    files: { images: Express.Multer.File[]; selfie: Express.Multer.File }, // Recibe todo en un solo objeto
   ) {
     this.logger.log(`Creating a new user: ${JSON.stringify(createUserDto)}`);
     const imagesUrls: string[] = [];
