@@ -17,6 +17,7 @@ import { UserDataDto } from './user.dto';
 import { CloudService } from '@/services/cloudinary/cloud.service';
 import { UserService } from './user.service';
 import { ApiKeyGuard } from '@/guards/strategy';
+import { memoryStorage } from 'multer';
 
 @Controller('api/user')
 @UseGuards(ApiKeyGuard)
@@ -43,25 +44,20 @@ export class UserController {
         { name: 'selfie', maxCount: 1 },
       ],
       {
-        limits: { fileSize: 50 * 1024 * 1024 }, // 50 MB
+        storage: memoryStorage(),
+        limits: {
+          fileSize: 50 * 1024 * 1024, // 50 MB
+        },
+        fileFilter: (_req, file, cb) => {
+          console.log(`Received file: ${file.originalname}, size: ${file.size} bytes`);
+          cb(null, true);
+        },
       },
     ),
   )
   async create(
     @Body() createUserDto: UserDataDto,
-    @UploadedFiles(
-      new ParseFilePipeBuilder()
-        .addFileTypeValidator({
-          fileType: /(jpg|jpeg|png)$/,
-        })
-        .addMaxSizeValidator({
-          maxSize: 50 * 1024 * 1024, // 50 MB
-        })
-        .build({
-          errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
-        }),
-    )
-    files: { images: Express.Multer.File[]; selfie: Express.Multer.File }, // Recibe todo en un solo objeto
+    @UploadedFiles() files: { images: Express.Multer.File[]; selfie: Express.Multer.File }, // Recibe todo en un solo objeto
   ) {
     this.logger.log(`Creating a new user: ${JSON.stringify(createUserDto)}`);
     const imagesUrls: string[] = [];
