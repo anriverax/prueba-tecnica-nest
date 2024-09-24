@@ -48,7 +48,8 @@ export class UserController {
         limits: {
           fileSize: 50 * 1024 * 1024, // 50 MB
         },
-        fileFilter: (_req, file, cb) => {
+        fileFilter: (req, file, cb) => {
+          console.log(req);
           console.log(`Received file: ${file.originalname}, size: ${file.size} bytes`);
           cb(null, true);
         },
