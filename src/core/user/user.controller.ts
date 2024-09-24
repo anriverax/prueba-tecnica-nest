@@ -10,8 +10,6 @@ import {
   UseInterceptors,
   Logger,
   UseGuards,
-  ParseFilePipeBuilder,
-  HttpStatus,
 } from '@nestjs/common';
 import { UserDataDto } from './user.dto';
 import { CloudService } from '@/services/cloudinary/cloud.service';
