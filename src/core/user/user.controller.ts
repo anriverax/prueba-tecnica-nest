@@ -16,6 +16,7 @@ import { CloudService } from '@/services/cloudinary/cloud.service';
 import { UserService } from './user.service';
 import { ApiKeyGuard } from '@/guards/strategy';
 import { ParseMultipleFilesPipe } from './multiple-files.pipe';
+import multer from 'multer';
 
 @Controller('api/user')
 @UseGuards(ApiKeyGuard)
@@ -42,6 +43,8 @@ export class UserController {
         { name: 'selfie', maxCount: 1 },
       ],
       {
+        storage: multer.memoryStorage(),
+        limits: { fileSize: 20 * 1024 * 1024 }, // 20MB limit
         fileFilter: (req, file, callback) => {
           console.log(req);
           if (!file.mimetype.match(/^image\/(jpeg|png)$/)) {
