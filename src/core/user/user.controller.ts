@@ -16,7 +16,7 @@ import { CloudService } from '@/services/cloudinary/cloud.service';
 import { UserService } from './user.service';
 import { ApiKeyGuard } from '@/guards/strategy';
 import { ParseMultipleFilesPipe } from './multiple-files.pipe';
-import multer from 'multer';
+import * as multer from 'multer';
 
 @Controller('api/user')
 @UseGuards(ApiKeyGuard)
