@@ -10,7 +10,7 @@
     "prettify": "npm run format && npm run lint",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\"",
-    "start": "nest start",
+    "start": "nest start --max-old-space-size=512",
     "start:dev": "npm run prettify && nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main --max-old-space-size=512",
