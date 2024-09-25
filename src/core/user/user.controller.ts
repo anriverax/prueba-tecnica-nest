@@ -36,10 +36,21 @@ export class UserController {
 
   @Post('create')
   @UseInterceptors(
-    FileFieldsInterceptor([
-      { name: 'images', maxCount: 2 },
-      { name: 'selfie', maxCount: 1 },
-    ]),
+    FileFieldsInterceptor(
+      [
+        { name: 'images', maxCount: 2 },
+        { name: 'selfie', maxCount: 1 },
+      ],
+      {
+        fileFilter: (req, file, callback) => {
+          console.log(req);
+          if (!file.mimetype.match(/^image\/(jpeg|png)$/)) {
+            return callback(new Error('Only JPEG and PNG files are allowed'), false);
+          }
+          callback(null, true);
+        },
+      },
+    ),
   )
   async create(
     @Body() createUserDto: UserDataDto,
