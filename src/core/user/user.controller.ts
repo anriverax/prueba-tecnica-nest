@@ -64,6 +64,7 @@ export class UserController {
     const imagesUrls: string[] = [];
 
     for (const img of files.images) {
+      console.log(img);
       const url = await this.cloudService.uploadImage(img);
       imagesUrls.push(url['secure_url']);
     }

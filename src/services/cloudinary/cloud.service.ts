@@ -7,7 +7,15 @@ export class CloudService {
   async uploadImage(file: Express.Multer.File) {
     return new Promise((resolve, reject) => {
       const stream = cloudinary.uploader.upload_stream(
-        { resource_type: 'auto', access_mode: 'public' },
+        {
+          resource_type: 'auto',
+          access_mode: 'public',
+          transformation: [
+            { width: 500, height: 500, crop: 'limit' },
+            { quality: 'auto:best' },
+            { fetch_format: 'auto' },
+          ],
+        },
         (error, result) => {
           if (error) {
             return reject(error);
