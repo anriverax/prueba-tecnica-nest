@@ -11,7 +11,7 @@ import { UserModule } from './core/user/user.module';
   imports: [
     MulterModule.register({
       limits: {
-        fileSize: 50 * 1024 * 1024, // 50 MB en bytes
+        fileSize: 20 * 1024 * 1024, // 50 MB en bytes
       },
     }),
     ConfigModule.forRoot({

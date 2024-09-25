@@ -8,16 +8,17 @@ export class CloudService {
     return new Promise((resolve, reject) => {
       const stream = cloudinary.uploader.upload_stream(
         {
-          resource_type: 'auto',
+          resource_type: 'image',
           access_mode: 'public',
           transformation: [
-            { width: 500, height: 500, crop: 'limit' },
+            { width: 1000, crop: 'scale' },
             { quality: 'auto:best' },
             { fetch_format: 'auto' },
           ],
         },
         (error, result) => {
           if (error) {
+            console.log('ERROR');
             return reject(error);
           }
           resolve(result);
